@@ -10,7 +10,6 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider.value(value: UserProvider.initialize()),
-    ChangeNotifierProvider.value(value: PaymentProvider.initialize())
   ] ,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

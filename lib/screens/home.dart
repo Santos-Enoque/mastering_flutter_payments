@@ -7,7 +7,8 @@ import 'package:mastering_payments/services/functions.dart';
 import 'package:mastering_payments/services/styles.dart';
 import 'package:mastering_payments/widgets/custom_text.dart';
 import 'package:provider/provider.dart';
-import 'package:stripe_payment/stripe_payment.dart';
+
+import 'credit_card.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -15,20 +16,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    StripePayment.setOptions(StripeOptions(
-        publishableKey: "pk_test_aSaULNS8cJU6Tvo20VAXy6rp",
-        merchantId: "Test",
-        androidPayMode: 'test'));
-    super.initState();
-  }
+
 
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserProvider>(context);
-    final payment = Provider.of<PaymentProvider>(context);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -100,12 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   decoration: BoxDecoration(color: green),
                   child: GestureDetector(
                     onTap: () async {
-//                      await StripePayment.paymentRequestWithCardForm(
-//                        CardFormPaymentRequest(),
-//                      ).catchError((err){
-//                        print(err.toString());
-//                      });
-                      payment.addCard();
+                          changeScreen(context, CreditCard(title: "Add card",));
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
