@@ -4,6 +4,7 @@ import 'package:mastering_payments/provider/user_provider.dart';
 import 'package:mastering_payments/screens/login1.dart';
 import 'package:mastering_payments/screens/products.dart';
 import 'package:mastering_payments/services/functions.dart';
+import 'package:mastering_payments/services/stripe.dart';
 import 'package:mastering_payments/services/styles.dart';
 import 'package:mastering_payments/widgets/custom_text.dart';
 import 'package:provider/provider.dart';
@@ -16,7 +17,18 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
+  StripeServices stripe = StripeServices();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    stripe.addCard(
+      cardNumber: 4242424242424242,
+      month: 1,
+      year: 21,
+      cvc: 212
+    );
+  }
 
   @override
   Widget build(BuildContext context) {

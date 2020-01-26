@@ -26,6 +26,9 @@ class ProductCard extends StatelessWidget {
             ]
         ),
         child: ListTile(
+          onTap: (){
+            Navigator.pop(context);
+          },
           title: Text(name),
           subtitle: Text("\$${price.toString()}"),
           trailing: Container(

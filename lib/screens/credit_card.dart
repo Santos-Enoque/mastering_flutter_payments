@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_credit_card/credit_card_form.dart';
 import 'package:flutter_credit_card/credit_card_model.dart';
 import 'package:flutter_credit_card/credit_card_widget.dart';
+import 'package:mastering_payments/screens/home.dart';
+import 'package:mastering_payments/services/functions.dart';
 
 class CreditCard extends StatefulWidget {
   CreditCard({Key key, this.title}) : super(key: key);
@@ -65,6 +67,8 @@ class _CreditCardState extends State<CreditCard> {
           print("exp year: ${exp_year.toString()}");
           print("exp month: ${exp_month.toString()}");
           print(cardNumber.replaceAll(RegExp(r"\s+\b|\b\s"), ""));
+
+          changeScreen(context, HomeScreen());
 
         },
         tooltip: 'Submit',
