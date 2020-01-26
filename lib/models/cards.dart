@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class CreditCardModel{
+class CardModel{
   static const ID = 'id';
   static const CUSTOMER_ID = 'customerId';
-  static const MONTH = 'month';
-  static const YEAR = 'year';
+  static const MONTH = 'exp_month';
+  static const YEAR = 'exp_year';
   static const LAST_FOUR = 'last4';
 
   String _id;
@@ -20,7 +20,7 @@ class CreditCardModel{
   int get year => _year;
   int get last4 => _last4;
 
-  CreditCardModel.fromSnapshot(DocumentSnapshot snapshot){
+  CardModel.fromSnapshot(DocumentSnapshot snapshot){
     _id = snapshot.data[ID];
     _customerId = snapshot.data[CUSTOMER_ID];
     _month = snapshot.data[MONTH];
@@ -28,9 +28,9 @@ class CreditCardModel{
     _last4 = snapshot.data[LAST_FOUR];
   }
 
-  CreditCardModel.fromMap(Map data){
+  CardModel.fromMap(Map data, {String customerId}){
     _id = data[ID];
-    _customerId = data[CUSTOMER_ID];
+    _customerId = customerId;
     _month = data[MONTH];
     _year = data[YEAR];
     _last4 = data[LAST_FOUR];

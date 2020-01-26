@@ -20,6 +20,8 @@ class UserProvider with ChangeNotifier{
 
 //  we will make this variables public for now
   final formKey = GlobalKey<FormState>();
+//  getter
+  UserModel get userModel => _userModel;
 
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();

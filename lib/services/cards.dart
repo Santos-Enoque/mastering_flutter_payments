@@ -3,6 +3,8 @@ import 'package:mastering_payments/models/cards.dart';
 import 'package:mastering_payments/models/user.dart';
 
 class CardServices{
+  static const CUSTOMER_ID = 'customerId';
+
   String collection = "cards";
   Firestore _firestore = Firestore.instance;
 
@@ -18,14 +20,12 @@ class CardServices{
     _firestore.collection(collection).document(values["id"]).delete();
   }
 
-  void getAllCards(String customerId){
-    _firestore.collection(collection).document(customerId).delete();
-  }
-
-
-
-  Future<CreditCardModel> getCardById(String id) =>
-      _firestore.collection(collection).document(id).get().then((doc){
-        return CreditCardModel.fromSnapshot(doc);
+  Future<List<CardModel>> getPurchaseHistory({String customerId})async =>
+      _firestore.collection(collection).where(CUSTOMER_ID, isEqualTo: customerId).getDocuments().then((result){
+        List<CardModel> listOfCards = [];
+        result.documents.map((item){
+          listOfCards.add(CardModel.fromSnapshot(item));
+        });
+        return listOfCards;
       });
 }

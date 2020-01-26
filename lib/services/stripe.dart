@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
+import 'package:mastering_payments/services/cards.dart';
 import 'package:mastering_payments/services/user.dart';
 
 
@@ -15,12 +16,12 @@ class StripeServices{
     "Content-Type": "application/x-www-form-urlencoded"
   };
 
-  Future<void> createStripeCustomer({String email, String userId})async{
+  Future<String> createStripeCustomer({String email, String userId})async{
     Map<String, String> body = {
       'email': email,
     };
 
-    http.post(CUSTOMERS_URL, body: body, headers: headers).then((response){
+    String stripeId = await http.post(CUSTOMERS_URL, body: body, headers: headers).then((response){
      String stripeId = jsonDecode(response.body)["id"];
       print("The stripe id is: $stripeId");
       UserService userService = UserService();
@@ -28,9 +29,13 @@ class StripeServices{
         "id": userId,
         "stripeId": stripeId
       });
+      return stripeId;
     }).catchError((err){
       print("==== THERE WAS AN ERROR ====: ${err.toString()}");
+      return null;
     });
+
+    return stripeId;
   }
 
   Future<void> addCard({int cardNumber, int month, int year, int cvc, String stripeId})async{
@@ -41,8 +46,8 @@ class StripeServices{
       "card[exp_year]":year,
       "card[cvc]":cvc
     };
-    Dio().post(PAYMENT_METHOD_URL, data: body, options: Options(contentType: Headers.formUrlEncodedContentType, headers: headers)).then((req){
-      String paymentMethod = jsonDecode(req.data)["id"];
+    Dio().post(PAYMENT_METHOD_URL, data: body, options: Options(contentType: Headers.formUrlEncodedContentType, headers: headers)).then((response){
+      String paymentMethod = response.data["id"];
       print("=== The payment mathod id id ===: $paymentMethod");
       http.post("https://api.stripe.com/v1/payment_methods/$paymentMethod/attach", body: {
         "customer": stripeId
@@ -50,6 +55,11 @@ class StripeServices{
       headers: headers
       ).then((response){
         print("CODE ZERO");
+        CardServices cardServices = CardServices();
+        Map values = {
+
+        };
+        cardServices.createCard(values);
       }).catchError((err){
         print("ERROR ATTACHING CARD TO CUSTOMER");
         print("ERROR: ${err.toString()}");

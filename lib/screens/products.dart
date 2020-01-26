@@ -10,12 +10,10 @@ import 'package:provider/provider.dart';
 
 // static product list
 List<Product> productsList = [
-  Product("Restful Api", 12.99),
-  Product("Flask", 4.99),
-  Product("Flutter", 7.05),
-  Product("Python", 12.00),
-  Product("Dart", 0.99),
-  Product("Java", 1.99),
+  Product("Flutter", 7.05, 'flutter.png'),
+  Product("Python", 12.00, 'python.jpg'),
+  Product("Dart", 0.99, 'dart.png'),
+  Product("Java", 1.99, 'java.png'),
 ];
 
 class ProductsScreen extends StatefulWidget {
@@ -44,7 +42,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
           child: ListView.builder(
             itemCount: productsList.length,
               itemBuilder: (_, index){
-            return ProductCard(name: productsList[index].name, price: productsList[index].price);
+            return ProductCard(image: productsList[index].image,name: productsList[index].name, price: productsList[index].price);
           })
         ),
       ),

@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_credit_card/credit_card_form.dart';
 import 'package:flutter_credit_card/credit_card_model.dart';
 import 'package:flutter_credit_card/credit_card_widget.dart';
+import 'package:mastering_payments/provider/user_provider.dart';
 import 'package:mastering_payments/screens/home.dart';
 import 'package:mastering_payments/services/functions.dart';
+import 'package:mastering_payments/services/stripe.dart';
+import 'package:provider/provider.dart';
 
 class CreditCard extends StatefulWidget {
   CreditCard({Key key, this.title}) : super(key: key);
@@ -23,6 +26,8 @@ class _CreditCardState extends State<CreditCard> {
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<UserProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -56,7 +61,7 @@ class _CreditCardState extends State<CreditCard> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: (){
+        onPressed: ()async{
           int cvc = int.tryParse(cvvCode);
           int carNo = int.tryParse(cardNumber.replaceAll(RegExp(r"\s+\b|\b\s"), ""));
           int exp_year = int.tryParse(expiryDate.substring(3,5));
@@ -67,6 +72,13 @@ class _CreditCardState extends State<CreditCard> {
           print("exp year: ${exp_year.toString()}");
           print("exp month: ${exp_month.toString()}");
           print(cardNumber.replaceAll(RegExp(r"\s+\b|\b\s"), ""));
+//
+//          StripeServices stripeServices = StripeServices();
+//          if(user.userModel.stripeId == null){
+//           String stripeID = await stripeServices.createStripeCustomer(email: user.userModel.email, userId: user.user.uid)
+//          stripeServices.addCard(stripeId: stripeID, month: exp_month, year: exp_year, cvc: cvc, cardNumber: carNo);
+//          }
+
 
           changeScreen(context, HomeScreen());
 
