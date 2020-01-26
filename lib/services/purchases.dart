@@ -16,8 +16,8 @@ class PurchaseServices{
 
 //  Future
 
-  Future<UserModel> getPurchaseById(String id) =>
-      _firestore.collection(collection).document(id).get().then((doc){
-        return PurchaseModel.fromSnapshot(doc);
-      });
+//  Future<UserModel> getPurchaseById(String id) =>
+//      _firestore.collection(collection).document(id).get().then((doc){
+//        return PurchaseModel.fromSnapshot(doc);
+//      });
 }
