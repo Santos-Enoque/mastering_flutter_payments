@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mastering_payments/provider/payment_provider.dart';
+import 'package:mastering_payments/provider/products_provider.dart';
 import 'package:mastering_payments/provider/user_provider.dart';
 import 'package:mastering_payments/screens/home.dart';
 import 'package:mastering_payments/screens/login1.dart';
@@ -10,6 +11,7 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider.value(value: UserProvider.initialize()),
+    ChangeNotifierProvider.value(value: ProductsProvider()),
   ] ,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -24,6 +26,7 @@ class ScreensController extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserProvider>(context);
+
     switch(user.status){
       case Status.Uninitialized:
         return Loading();

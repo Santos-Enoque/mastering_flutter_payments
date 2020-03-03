@@ -6,7 +6,7 @@ import 'custom_text.dart';
 class ProductCard extends StatelessWidget {
   final String name;
   final String image;
-  final double price;
+  final String price;
 
   const ProductCard({Key key,@required this.name,@required this.price, this.image}) : super(key: key);
 
@@ -30,7 +30,7 @@ class ProductCard extends StatelessWidget {
           onTap: (){
             Navigator.pop(context);
           },
-          leading: Image.asset('images/$image', width: 80, height: 80,),
+          leading: Image.network('$image', width: 80, height: 80,),
           title: Text(name),
           subtitle: Text("\$${price.toString()}"),
           trailing: Container(
