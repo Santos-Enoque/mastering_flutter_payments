@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mastering_payments/models/product.dart';
-import 'package:mastering_payments/provider/payment_provider.dart';
+import 'package:mastering_payments/provider/products_provider.dart';
 import 'package:mastering_payments/provider/user_provider.dart';
 import 'package:mastering_payments/screens/login1.dart';
 import 'package:mastering_payments/screens/manage_cards.dart';
-import 'package:mastering_payments/screens/products.dart';
 import 'package:mastering_payments/screens/putchase.dart';
 import 'package:mastering_payments/services/functions.dart';
 import 'package:mastering_payments/services/stripe.dart';
@@ -16,13 +14,6 @@ import 'package:provider/provider.dart';
 import 'credit_card.dart';
 
 
-// static product list
-List<Product> productsList = [
-  Product("Flutter", 7.05, 'flutter.png'),
-  Product("Python", 12.00, 'python.jpg'),
-  Product("Dart", 0.99, 'dart.png'),
-  Product("Java", 1.99, 'java.png'),
-];
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -47,6 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserProvider>(context);
+    final products = Provider.of<ProductsProvider>(context);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -200,7 +192,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   padding: const EdgeInsets.all(8.0),
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                      itemCount: productsList.length,
+                      itemCount: products.productsList.length,
                       itemBuilder: (_, index){
                     return                 Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -222,14 +214,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           SizedBox(
                             height: 10,
                           ),
-                          Image.asset("images/${productsList[index].image}", width: 70,),
+                          Image.network("${products.productsList[index].image}", width: 70,),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: <Widget>[
-                                CustomText(msg: productsList[index].name,),
-                                CustomText(msg: "\$" + productsList[index].price.toString(), weight: FontWeight.bold,)
+                                CustomText(msg: products.productsList[index].name,),
+                                CustomText(msg: "\$" + products.productsList[index].price.toString(), weight: FontWeight.bold,)
                               ],
                             ),
                           ),
@@ -261,7 +253,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               Column(
-                children: productsList.map((item)=> ProductCard(image: item.image,name: item.name, price: item.price)).toList(),
+                children: products.productsList.map((item)=> ProductCard(image: item.image,name: item.name, price: item.price)).toList(),
               ),
 
             ],

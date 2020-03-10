@@ -1,20 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:mastering_payments/models/product.dart';
+import 'package:mastering_payments/provider/products_provider.dart';
 import 'package:mastering_payments/provider/user_provider.dart';
-import 'package:mastering_payments/screens/login1.dart';
-import 'package:mastering_payments/services/functions.dart';
 import 'package:mastering_payments/services/styles.dart';
-import 'package:mastering_payments/widgets/custom_text.dart';
 import 'package:mastering_payments/widgets/product_card.dart';
 import 'package:provider/provider.dart';
 
-// static product list
-List<Product> productsList = [
-  Product("Flutter", 7.05, 'flutter.png'),
-  Product("Python", 12.00, 'python.jpg'),
-  Product("Dart", 0.99, 'dart.png'),
-  Product("Java", 1.99, 'java.png'),
-];
 
 class ProductsScreen extends StatefulWidget {
   @override
@@ -25,6 +15,8 @@ class _ProductsScreenState extends State<ProductsScreen> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserProvider>(context);
+    final products = Provider.of<ProductsProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -40,9 +32,10 @@ class _ProductsScreenState extends State<ProductsScreen> {
         color: white,
         child: Container(
           child: ListView.builder(
-            itemCount: productsList.length,
+            itemCount: products.productsList.length,
               itemBuilder: (_, index){
-            return ProductCard(image: productsList[index].image,name: productsList[index].name, price: productsList[index].price);
+
+            return ProductCard(image: products.productsList[index].image,name: products.productsList[index].name, price: products.productsList[index].price);
           })
         ),
       ),

@@ -95,9 +95,11 @@ class _LoginOneState extends State<LoginOne> {
                   decoration: BoxDecoration(color: green),
                   child: GestureDetector(
                     onTap: () async {
-                      if (!await user.signIn())
+                      if (!await user.signIn()){
                         _key.currentState.showSnackBar(
                             SnackBar(content: Text("Sign in failed")));
+                        return;
+                      }
                       user.clearController();
                       changeScreenReplacement(context, HomeScreen());
                     },
