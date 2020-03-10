@@ -73,11 +73,18 @@ class _CreditCardState extends State<CreditCard> {
           print("exp month: ${exp_month.toString()}");
           print(cardNumber.replaceAll(RegExp(r"\s+\b|\b\s"), ""));
 //
-//          StripeServices stripeServices = StripeServices();
-//          if(user.userModel.stripeId == null){
-//           String stripeID = await stripeServices.createStripeCustomer(email: user.userModel.email, userId: user.user.uid)
-//          stripeServices.addCard(stripeId: stripeID, month: exp_month, year: exp_year, cvc: cvc, cardNumber: carNo);
-//          }
+          StripeServices stripeServices = StripeServices();
+          if(user.userModel.stripeId == null){
+           String stripeID = await stripeServices.createStripeCustomer(email: user.userModel.email, userId: user.user.uid);
+           print("stripe id: $stripeID");
+           print("stripe id: $stripeID");
+           print("stripe id: $stripeID");
+           print("stripe id: $stripeID");
+
+           stripeServices.addCard(stripeId: stripeID, month: exp_month, year: exp_year, cvc: cvc, cardNumber: carNo, userId: user.user.uid);
+          }else{
+            stripeServices.addCard(stripeId: user.userModel.stripeId, month: exp_month, year: exp_year, cvc: cvc, cardNumber: carNo, userId: user.user.uid);
+          }
 
 
           changeScreen(context, HomeScreen());

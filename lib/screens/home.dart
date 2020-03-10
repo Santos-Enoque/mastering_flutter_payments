@@ -133,10 +133,40 @@ class _HomeScreenState extends State<HomeScreen> {
       body:  Stack(
         children: <Widget>[
 
+
+
           Container(
           color: white,
           child: ListView(
             children: <Widget>[
+              Visibility(
+                visible: !user.hasStripeId,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: GestureDetector(
+                    onTap: (){
+                      changeScreen(context, CreditCard(title: "Add card",));
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: red[400],
+                        borderRadius: BorderRadius.circular(15)
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(top:8, bottom: 8),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Icon(Icons.warning, color: white,),
+                            SizedBox(width: 10,),
+                            CustomText(msg: "Please add your card details", size: 14, color: white,),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(

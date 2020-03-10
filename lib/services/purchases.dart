@@ -8,8 +8,15 @@ class PurchaseServices{
   String collection = "purchases";
   Firestore _firestore = Firestore.instance;
 
-  void createPurchase(Map<String, dynamic> values){
-    _firestore.collection(collection).document(values["id"]).setData(values);
+  void createPurchase({String id, String productName, int amount, String userId, String date,String cardId }){
+    _firestore.collection(collection).document(id).setData({
+      "id":id,
+      "productName":productName,
+      "amount": amount,
+      "userId": userId,
+      "date": DateTime.now().toString(),
+      "cardId":cardId
+    });
   }
 
  Future<List<PurchaseModel>> getPurchaseHistory({String customerId})async =>

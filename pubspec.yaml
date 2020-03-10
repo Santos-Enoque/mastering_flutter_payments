@@ -25,6 +25,7 @@ dependencies:
   flutter_credit_card: ^0.1.3
   dio: ^3.0.8
   http: ^0.12.0+4
+  uuid: ^2.0.4
 
 
 

@@ -2,7 +2,9 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
 import 'package:mastering_payments/services/cards.dart';
+import 'package:mastering_payments/services/purchases.dart';
 import 'package:mastering_payments/services/user.dart';
+import 'package:uuid/uuid.dart';
 
 
 class StripeServices{
@@ -38,8 +40,8 @@ class StripeServices{
     return stripeId;
   }
 
-  Future<void> addCard({int cardNumber, int month, int year, int cvc, String stripeId})async{
-    Map<String, dynamic> body = {
+  Future<void> addCard({int cardNumber, int month, int year, int cvc, String stripeId, String userId})async{
+    Map body = {
       "type": "card",
       "card[number]": cardNumber,
       "card[exp_month]": month,
@@ -53,35 +55,42 @@ class StripeServices{
         "customer": stripeId
       },
       headers: headers
-      ).then((response){
-        print("CODE ZERO");
-        CardServices cardServices = CardServices();
-        Map values = {
-
-        };
-        cardServices.createCard(values);
-      }).catchError((err){
+      ).catchError((err){
         print("ERROR ATTACHING CARD TO CUSTOMER");
         print("ERROR: ${err.toString()}");
 
       });
-//      attachCard();
-    }).catchError((err){
-      print("==== THERE WAS AN ERROR ====: ${err.toString()}");
-    });
 
-    Future<void> charge({String customer, int amount})async{
-      Map<String, dynamic> data ={
-        "amount": amount,
-        "currency": "usd",
-        "source": "tok_amex",
-        "customer": customer
-      };
+      CardServices cardServices = CardServices();
+      cardServices.createCard(id: paymentMethod, last4: int.parse(cardNumber.toString().substring(11)), exp_month: month, exp_year: year, userId: userId);
+      UserService userService = UserService();
+      userService.updateDetails({
+        "id": userId,
+        "activeCard": paymentMethod
+      });
+    });
+  }
+
+  Future<bool> charge({String customer, int amount, String userId, String cardId, String productName})async{
+    Map<String, dynamic> data ={
+      "amount": amount,
+      "currency": "usd",
+      "source": cardId,
+      "customer": customer
+    };
+    try{
       Dio().post(CHARGE_URL, data: data, options: Options(contentType: Headers.formUrlEncodedContentType, headers: headers)).then((response){
         print(response.toString());
-      }).catchError((err){
-        print("There was an error charging the customer: ${err.toString()}");
       });
+      PurchaseServices purchaseServices = PurchaseServices();
+      var uuid = Uuid();
+      var purchaseId = uuid.v1();
+      purchaseServices.createPurchase(id: purchaseId, amount: amount, cardId: cardId, userId: userId, productName: productName);
+      return true;
+    }catch(e){
+      print("there was an error charging the customer: ${e.toString()}");
+      return false;
     }
   }
+
 }

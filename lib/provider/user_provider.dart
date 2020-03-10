@@ -22,6 +22,7 @@ class UserProvider with ChangeNotifier{
   final formKey = GlobalKey<FormState>();
 //  getter
   UserModel get userModel => _userModel;
+  bool hasStripeId = true;
 
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
@@ -87,6 +88,14 @@ class UserProvider with ChangeNotifier{
       _user = user;
       _status = Status.Authenticated;
       _userModel = await _userService.getUserById(user.uid);
+      if(_userModel.stripeId == null){
+        hasStripeId = false;
+        notifyListeners();
+      }
+      print(_userModel.name);
+      print(_userModel.email);
+      print(_userModel.stripeId);
+
     }
     notifyListeners();
   }
