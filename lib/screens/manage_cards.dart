@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_credit_card/credit_card_model.dart';
 import 'package:mastering_payments/models/cards.dart';
+import 'package:mastering_payments/provider/user_provider.dart';
 import 'package:mastering_payments/screens/credit_card.dart';
 import 'package:mastering_payments/services/styles.dart';
+import 'package:provider/provider.dart';
 
 class ManagaCardsScreen extends StatefulWidget {
   @override
@@ -10,29 +12,11 @@ class ManagaCardsScreen extends StatefulWidget {
 }
 
 class _ManagaCardsScreenState extends State<ManagaCardsScreen> {
-  List<CardModel> cardsList = [
-  CardModel.fromMap({
-  'id': "asdasdas",
-  'exp_month': 12,
-  'exp_year':21,
-  'last4': 4242,
-  }, customerId: 'asdasdasdas'),
-  CardModel.fromMap({
-  'id': "asdasdas",
-  'exp_month': 12,
-  'exp_year':21,
-  'last4': 2343,
-  }, customerId: 'asdasdasdas'),
-  CardModel.fromMap({
-  'id': "asdasdas",
-  'exp_month': 12,
-  'exp_year':21,
-  'last4': 3424,
-  }, customerId: 'asdasdasdas'),
-  ];
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<UserProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -45,7 +29,7 @@ class _ManagaCardsScreenState extends State<ManagaCardsScreen> {
         ),
       ),
       body: ListView.builder(
-          itemCount: cardsList.length,
+          itemCount: user.cards.length,
           itemBuilder: (_, index){
         return  Padding(
           padding: const EdgeInsets.all(8.0),
@@ -63,8 +47,8 @@ class _ManagaCardsScreenState extends State<ManagaCardsScreen> {
             ),
             child: ListTile(
               leading: Icon(Icons.credit_card),
-              title: Text("**** **** **** ${cardsList[index].last4}"),
-              subtitle: Text("${cardsList[index].month} / ${cardsList[index].year}"),
+              title: Text("**** **** **** ${user.cards[index].last4}"),
+              subtitle: Text("${user.cards[index].month} / ${user.cards[index].year}"),
               trailing: Icon(Icons.more_horiz),
               onTap: (){
 

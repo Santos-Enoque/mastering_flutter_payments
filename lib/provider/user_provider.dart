@@ -3,7 +3,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:mastering_payments/models/cards.dart';
+import 'package:mastering_payments/models/purchase.dart';
 import 'package:mastering_payments/models/user.dart';
+import 'package:mastering_payments/services/cards.dart';
+import 'package:mastering_payments/services/purchases.dart';
 import 'package:mastering_payments/services/user.dart';
 
 enum Status{Uninitialized, Authenticated, Authenticating, Unauthenticated}
@@ -16,7 +20,13 @@ class UserProvider with ChangeNotifier{
   FirebaseUser get user => _user;
   Firestore _firestore = Firestore.instance;
   UserService _userService = UserService();
+  CardServices _cardServices  = CardServices();
+  PurchaseServices _purchaseServices = PurchaseServices();
+
   UserModel _userModel;
+  List<CardModel> cards = [];
+  List<PurchaseModel> purchaseHistory = [];
+
 
 //  we will make this variables public for now
   final formKey = GlobalKey<FormState>();
@@ -45,6 +55,16 @@ class UserProvider with ChangeNotifier{
       print(e.toString());
       return false;
     }
+  }
+
+  void hasCard(){
+    hasStripeId = !hasStripeId;
+    notifyListeners();
+}
+
+Future<void> loadCardsAndPurchase({String userId})async{
+    cards = await _cardServices.getCards(userId: userId);
+    purchaseHistory = await _purchaseServices.getPurchaseHistory(userId: userId);
   }
 
   Future<bool> signUp()async{
@@ -88,6 +108,8 @@ class UserProvider with ChangeNotifier{
       _user = user;
       _status = Status.Authenticated;
       _userModel = await _userService.getUserById(user.uid);
+      cards = await _cardServices.getCards(userId: user.uid);
+      purchaseHistory = await _purchaseServices.getPurchaseHistory(userId: user.uid);
       if(_userModel.stripeId == null){
         hasStripeId = false;
         notifyListeners();

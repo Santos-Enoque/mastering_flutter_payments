@@ -85,9 +85,10 @@ class _CreditCardState extends State<CreditCard> {
           }else{
             stripeServices.addCard(stripeId: user.userModel.stripeId, month: exp_month, year: exp_year, cvc: cvc, cardNumber: carNo, userId: user.user.uid);
           }
+        user.hasCard();
+          user.loadCardsAndPurchase(userId: user.user.uid);
 
-
-          changeScreen(context, HomeScreen());
+          changeScreenReplacement(context, HomeScreen());
 
         },
         tooltip: 'Submit',

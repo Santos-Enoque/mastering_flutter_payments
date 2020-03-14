@@ -3,7 +3,7 @@ import 'package:mastering_payments/models/cards.dart';
 import 'package:mastering_payments/models/user.dart';
 
 class CardServices{
-  static const CUSTOMER_ID = 'customerId';
+  static const USER_ID = 'userId';
 
   String collection = "cards";
   Firestore _firestore = Firestore.instance;
@@ -27,11 +27,22 @@ class CardServices{
   }
 
   Future<List<CardModel>> getPurchaseHistory({String customerId})async =>
-      _firestore.collection(collection).where(CUSTOMER_ID, isEqualTo: customerId).getDocuments().then((result){
+      _firestore.collection(collection).where(USER_ID, isEqualTo: customerId).getDocuments().then((result){
         List<CardModel> listOfCards = [];
         result.documents.map((item){
           listOfCards.add(CardModel.fromSnapshot(item));
         });
         return listOfCards;
+      });
+
+  Future<List<CardModel>> getCards({String userId})async =>
+      _firestore.collection(collection).where(USER_ID, isEqualTo: userId).getDocuments().then((result){
+        List<CardModel> cards = [];
+        print("=== RESULT SIZE ${result.documents.length}");
+        for(DocumentSnapshot item in result.documents){
+          cards.add(CardModel.fromSnapshot(item));
+          print(" CARDS ${cards.length}");
+        }
+        return cards;
       });
 }

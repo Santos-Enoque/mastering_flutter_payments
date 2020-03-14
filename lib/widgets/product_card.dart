@@ -45,6 +45,7 @@ class ProductCard extends StatelessWidget {
               StripeServices stripeServices = StripeServices() ;
 //              1000 is equal to $10.00
               stripeServices.charge(productName: name,cardId: user.userModel.activeCard, userId: user.user.uid, customer: user.userModel.stripeId, amount: 1000).then((value){
+              user.loadCardsAndPurchase(userId: user.user.uid);
                 if(value){
                   changeScreen(context, Success());
                 }else{

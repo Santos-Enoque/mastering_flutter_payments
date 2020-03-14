@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Products{
+class
+Products{
   static const NAME = "name";
   static const PRICE = "price";
   static const IMAGE = "image";
